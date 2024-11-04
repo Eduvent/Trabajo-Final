@@ -10,6 +10,8 @@ export function AquaViaContextProvider({ children }: { children: ReactNode }) {
     const [currentProvince, setCurrentProvince] = useState<string>('');
     const [sectors, setSectors] = useState<any[]>([]);
     const [currentSector, setCurrentSector] = useState<Sector | null>(null);
+    const [nearestSector, setNearestSector] = useState<Reservoir | null>(null);
+    const [minDistance, setMinDistance] = useState<number>(0);
 
     const api = new ApiService();
 
@@ -47,7 +49,11 @@ export function AquaViaContextProvider({ children }: { children: ReactNode }) {
         sectors: sectors,
         setSectors: setSectors,
         currentSector: currentSector,
-        setCurrentSector: setCurrentSector
+        setCurrentSector: setCurrentSector,
+        nearestReservoir: nearestSector,
+        setNearestReservoir: setNearestSector,
+        minDistance: minDistance,
+        setMinDistance: setMinDistance
     }
 
     return (

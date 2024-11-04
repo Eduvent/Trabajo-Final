@@ -1,7 +1,7 @@
 import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
 import { useContext } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Polyline, Popup, TileLayer } from "react-leaflet";
 import marker from '../assets/marker.png';
 import reservoir from '../assets/reservoir.png';
 import { AquaViaContext } from "../Context/AquiaViaContextType";
@@ -11,7 +11,7 @@ import { SetMapCenter } from './SetMapCenter';
 
 export function Map() {
     const peru: [number, number] = [-10.47701725856131, -75.44419329689929];
-    const { reservoirs, currentSector } = useContext(AquaViaContext);
+    const { reservoirs, currentSector, nearestReservoir } = useContext(AquaViaContext);
 
     const reservoirIcon = new L.Icon({
         iconUrl: reservoir, // URL de la imagen
@@ -34,9 +34,16 @@ export function Map() {
             <TileLayer
                 url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
-            {
-                /* <Polyline positions={[embalse, punto_critico]} weight={5} /> */
+
+            {currentSector &&
+                nearestReservoir &&
+                <Polyline
+                    positions={
+                        [[currentSector.lat, currentSector.lon],
+                        [nearestReservoir.lat, nearestReservoir.lon]]}
+                    weight={5} />
             }
+
 
             {
                 reservoirs.map((reservoir: Reservoir) =>

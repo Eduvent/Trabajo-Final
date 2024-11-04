@@ -13,6 +13,10 @@ export type AquaViaContextType = {
     setSectors: (val: Sector[]) => void,
     currentSector: Sector | null,
     setCurrentSector: (val: Sector) => void,
+    nearestReservoir: Sector | null,
+    setNearestReservoir: (val: Reservoir | null) => void,
+    minDistance: number,
+    setMinDistance: (val: number) => void
 }
 
 /*default values */
@@ -27,4 +31,8 @@ export const AquaViaContext = createContext<AquaViaContextType>({
     setSectors: () => { },
     currentSector: null,
     setCurrentSector: () => { },
+    nearestReservoir: null,
+    setNearestReservoir: () => { },
+    minDistance: 0,
+    setMinDistance: () => { }
 });

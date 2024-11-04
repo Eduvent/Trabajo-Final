@@ -5,6 +5,7 @@ import './Sidebar.css';
 import { AquaViaContext } from '../Context/AquiaViaContextType';
 import { Sector } from '../Model/sector';
 import { ApiService } from '../Service/apiService';
+import { Reservoir } from '../Model/reservoir';
 
 export function Sidebar() {
     const [open, setOpen] = useState(false);
@@ -14,7 +15,7 @@ export function Sidebar() {
         setOpen(newOpen);
     };
 
-    const { provinces, sectors, currentProvince, currentSector, setCurrentProvince, setCurrentSector } = useContext(AquaViaContext);
+    const { provinces, sectors, currentProvince, currentSector, setCurrentProvince, setCurrentSector, setNearestReservoir, setMinDistance } = useContext(AquaViaContext);
 
     const DrawerList = (
         <Box className='list'>
@@ -22,6 +23,7 @@ export function Sidebar() {
                 <InputLabel>Seleccionar departamento</InputLabel>
                 <Select
                     onChange={(e) => {
+                        setNearestReservoir(null);
                         const selectedProvince = e.target.value as string;
                         setCurrentProvince(selectedProvince);
                     }}
@@ -41,6 +43,7 @@ export function Sidebar() {
                 <InputLabel>Seleccionar punto crítico</InputLabel>
                 <Select
                     onChange={(e) => {
+                        setNearestReservoir(null);
                         const selectedSector = e.target.value as string;
                         setCurrentSector(sectors.find((sector) => sector.name === selectedSector) as Sector);
                     }}
@@ -61,7 +64,14 @@ export function Sidebar() {
                 onClick={() => {
                     const data = { Sector: currentSector };
 
-                    api.getDistance(data).then(res => console.log(res))
+                    api.getDistance(data).then(res => {
+                        const data = res.data;
+                        console.log(data);
+                        const reservoirData = data.reservoir;
+                        const reservoir = new Reservoir(reservoirData.Latitud, reservoirData.Longitud, reservoirData["Nombre de la Presa"]);
+                        setNearestReservoir(reservoir);
+                        setMinDistance(data.distance);
+                    })
                 }}
             >Buscar ruta óptima</Button>
         </Box >
